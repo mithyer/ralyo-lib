@@ -98,8 +98,6 @@
         const isDebug = null != urlParams.get('debug');
         const descriptionText = document.getElementById('descriptionText');
         const posterImage = document.getElementById('posterImage');
-        const keyValueRegex = new RegExp('^(name|creator|poster_url|description|songs|version)\s*:\s*([^#\n]+)?');
-
         descriptionText.textContent = 'Subscription description.'
         posterImage.src = 'https://r.886996007.xyz/images/icon.png';
         const url = `https://${isDebug ? '_libs' : 'libs'}.886996007.xyz/share/${id}/info`;
@@ -111,6 +109,7 @@
                 return response.text();
             })
             .then(html => {
+                const keyValueRegex = new RegExp('^(name|creator|poster_url|description|songs|version)\s*:\s*([^#\n]+)?');
                 const keyValueArray = new Array();
                 const matched = html.matchAll(keyValueRegex);
                 var poster_url = '';
