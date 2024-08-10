@@ -97,6 +97,7 @@
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
+        const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
         document.getElementById('openAppBtn').addEventListener('click', () => {
             const position = audioPlayer.currentTime;
@@ -112,7 +113,6 @@
             }, 1000);
         });
 
-        const urlParams = new URLSearchParams(window.location.search);
         const isDebug = null != urlParams.get('debug');
         const descriptionText = document.getElementById('descriptionText');
         const posterImage = document.getElementById('posterImage');
