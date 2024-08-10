@@ -103,7 +103,7 @@
         descriptionText.textContent = 'Subscription description.'
         posterImage.src = 'https://r.886996007.xyz/images/icon.png';
 
-        fetch(`https://${null != isDebug ? '_libs' : 'libs'}.886996007.xyz/share/${id}/info`)
+        fetch(`https://${isDebug ? '_libs' : 'libs'}.886996007.xyz/share/${id}/info`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('response not ok');
