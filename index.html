@@ -37,7 +37,7 @@
         }
 
         .text {
-            text-align: center;
+            text-align: left;
             white-space: pre-wrap;
             margin-bottom: 50px;
         }
@@ -93,6 +93,10 @@
     </div>
     <script>
 
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
         const isDebug = null != urlParams.get('debug');
@@ -109,7 +113,7 @@
                 return response.text();
             })
             .then(html => {
-                const keyValueRegex = new RegExp('^(name|creator|poster_url|description|songs|version)\s*:\s*([^#\n]+)?');
+                const keyValueRegex = new RegExp('^(name|creator|poster_url|description|songs|version)\s*:\s*([^#\n]+)?', 'gm');
                 const keyValueArray = new Array();
                 const matched = html.matchAll(keyValueRegex);
                 var poster_url = '';
@@ -121,7 +125,7 @@
                         poster_url = match[2];
                         continue;
                     }
-                    keyValueArray.push(`${match[1]}: ${match[2]}`)
+                    keyValueArray.push(`${capitalizeFirstLetter(match[1])}: ${match[2]}`)
                 }
                 descriptionText.textContent = keyValueArray.join('\n');
                 posterImage.src = poster_url;
