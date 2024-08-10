@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -136,6 +136,10 @@
                     }
                     if (match[1] == 'poster_url') {
                         poster_url = match[2];
+                        continue;
+                    }
+                    if (match[1] == 'name') {
+                        keyValueArray.push(`Lib Name: ${match[2]}`)
                         continue;
                     }
                     keyValueArray.push(`${capitalizeFirstLetter(match[1])}: ${match[2]}`)
