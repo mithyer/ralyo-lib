@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ralyo shared lib</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        .text {
+            text-align: center;
+            white-space: pre-wrap;
+            margin-bottom: 50px;
+        }
+
+
+
+        .button {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+        }
+
+        .button:hover {
+            background-color: white;
+            color: black;
+        }
+
+        #links {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        #links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img id="posterImage" class="image">
+        <p id="descriptionText" class="text"></p>
+        <button class="button">Subscribe in Ralyo</button>
+    </div>
+    <div id="links">
+        <a href="https://r.886996007.xyz/terms" target="_blank" style="text-decoration:underline;padding:0;margin:0;">
+            <font size="1.75">Terms of Service</font>
+        </a>
+        <a style="padding:0;margin:0;">
+            <font size="1.75">&</font>
+        </a>
+        <a href="https://r.886996007.xyz/policy" target="_blank" style="text-decoration:underline;padding:0;margin:0;">
+            <font size="1.75">Privacy Policy</font>
+        </a>
+    </div>
+    <script>
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const descriptionText = document.getElementById('descriptionText');
+        const posterImage = document.getElementById('posterImage');
+        const keyValueRegex = new RegExp('^(name|creator|poster_url|description|songs|version)\s*:\s*([^#\n]+)?');
+
+        descriptionText.textContent = 'Subscription description.'
+        posterImage.src = 'https://r.886996007.xyz/images/icon.png';
+
+        fetch(`https://${null != debug ? '_libs' : 'libs'}.886996007.xyz/share/${id}/info`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('response not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                const keyValueArray = new Array();
+                const matched = html.matchAll(keyValueRegex);
+                var poster_url = '';
+                for (const match of matched) {
+                    if (match.length != 3) {
+                        continue;
+                    }
+                    if (match[1] == 'poster_url') {
+                        poster_url = match[2];
+                        continue;
+                    }
+                    keyValueArray.push(`${match[1]}: ${match[2]}`)
+                }
+                descriptionText.textContent = keyValueArray.join('\n');
+                posterImage.src = poster_url;
+            })
+            .catch(error => {
+                console.error('Fetch operation error:', error);
+            });
+
+    </script>
+</body>
+
+</html>
