@@ -93,10 +93,6 @@
     </div>
     <script>
 
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
         document.getElementById('openAppBtn').addEventListener('click', () => {
@@ -118,6 +114,11 @@
         descriptionText.textContent = 'Subscription description.'
         posterImage.src = 'https://r.886996007.xyz/images/icon.png';
         const url = `https://${isDebug ? '_libs' : 'libs'}.886996007.xyz/share/${id}/info`;
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
         fetch(url)
             .then(response => {
                 if (!response.ok) {
@@ -131,18 +132,24 @@
                 const matched = html.matchAll(keyValueRegex);
                 var poster_url = '';
                 for (const match of matched) {
-                    if (match.length != 3) {
+                    const key = match[1];
+                    const value = match[2];
+                    if (match.length != 3 || key == 'songs') {
                         continue;
                     }
-                    if (match[1] == 'poster_url') {
-                        poster_url = match[2];
+                    if (key == 'poster_url') {
+                        poster_url = value;
                         continue;
                     }
-                    if (match[1] == 'name') {
-                        keyValueArray.push(`Lib Name: ${match[2]}`)
+                    if (key == 'description') {
+                        keyValueArray.push(value)
                         continue;
                     }
-                    keyValueArray.push(`${capitalizeFirstLetter(match[1])}: ${match[2]}`)
+                    if (key == 'name') {
+                        keyValueArray.push(`Lib Name: ${value}`)
+                        continue;
+                    }
+                    keyValueArray.push(`${capitalizeFirstLetter(key)}: ${value}`)
                 }
                 descriptionText.textContent = keyValueArray.join('\n');
                 posterImage.src = poster_url;
