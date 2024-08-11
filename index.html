@@ -111,7 +111,7 @@
         const isDebug = null != urlParams.get('debug');
         const descriptionText = document.getElementById('descriptionText');
         const posterImage = document.getElementById('posterImage');
-        descriptionText.textContent = 'Subscription description.'
+        descriptionText.textContent = 'Subscription Info.'
         posterImage.src = 'https://r.886996007.xyz/images/icon.png';
         const url = `https://${isDebug ? '_libs' : 'libs'}.886996007.xyz/share/${id}/info`;
 
@@ -130,7 +130,7 @@
                 const keyValueRegex = new RegExp('^(name|creator|poster_url|description|songs|version)\s*:\s*([^#\n]+)?', 'gm');
                 const keyValueArray = new Array();
                 const matched = html.matchAll(keyValueRegex);
-                var poster_url = '';
+                var poster_url = null;
                 for (const match of matched) {
                     const key = match[1];
                     const value = match[2];
@@ -151,8 +151,12 @@
                     }
                     keyValueArray.push(`${capitalizeFirstLetter(key)}: ${value}`)
                 }
-                descriptionText.textContent = keyValueArray.join('\n');
-                posterImage.src = poster_url;
+                if (keyValueArray.length > 0) {
+                    descriptionText.textContent = keyValueArray.join('\n');
+                }
+                if (null != poster_url) {
+                    posterImage.src = poster_url;
+                }
             })
             .catch(error => {
                 console.error('Fetch operation error:', error);
