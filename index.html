@@ -128,7 +128,7 @@
             })
             .then(html => {
                 const keyValueRegex = new RegExp('^(name|creator|poster_url|description|songs|version)\s*:\s*([^#\n]+)?', 'gm');
-                const keyValueArray = new Array();
+                const tipList = new Array();
                 const matched = html.matchAll(keyValueRegex);
                 var poster_url = null;
                 for (const match of matched) {
@@ -142,17 +142,17 @@
                         continue;
                     }
                     if (key == 'description') {
-                        keyValueArray.push(value)
+                        tipList.push(value)
                         continue;
                     }
                     if (key == 'name') {
-                        keyValueArray.push(`Lib Name: ${value}`)
+                        tipList.push(`Lib Name: ${value}`)
                         continue;
                     }
-                    keyValueArray.push(`${capitalizeFirstLetter(key)}: ${value}`)
+                    tipList.push(`${capitalizeFirstLetter(key)}: ${value}`)
                 }
-                if (keyValueArray.length > 0) {
-                    descriptionText.textContent = keyValueArray.join('\n');
+                if (tipList.length > 0) {
+                    descriptionText.textContent = tipList.join('\n');
                 }
                 if (null != poster_url) {
                     posterImage.src = poster_url;
